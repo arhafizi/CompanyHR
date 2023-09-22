@@ -1,13 +1,17 @@
 using CompanyHR.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
+using NLog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
 
 builder.Services.AddControllers();
 builder.Services.ConfigureCors();
 builder.Services.ConfigureIISIntegration();
+builder.Services.ConfigureLoggerService();
+
 
 var app = builder.Build();
 

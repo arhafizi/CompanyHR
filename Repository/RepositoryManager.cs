@@ -1,31 +1,27 @@
 ﻿using Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repository;
 public class RepositoryManager : IRepositoryManager {
     private readonly RepositoryContext _repositoryContext;
-    private readonly Lazy<ICompanyRepository> _companyRepository;
-    private readonly Lazy<IEmployeeRepository> _employeeRepository;
-
+    private ICompanyRepository _companyRepository;
+    private IEmployeeRepository _employeeRepository;
     public RepositoryManager(RepositoryContext repositoryContext) {
         _repositoryContext = repositoryContext;
-        _companyRepository = new Lazy<ICompanyRepository>(() =>
-            new CompanyRepository(repositoryContext));
-        _employeeRepository = new Lazy<IEmployeeRepository>(() =>
-            new EmployeeRepository(repositoryContext));
     }
-    public IEmployeeRepository Employee => 
-        (IEmployeeRepository)_companyRepository.Value;
-
-    public ICompanyRepository Company => 
-        (ICompanyRepository)_employeeRepository.Value;
-
-    public void Save() {
-        _repositoryContext.SaveChanges();
+    public ICompanyRepository Company {
+        get {
+            _companyRepository ??= new
+                CompanyRepository(_repositoryContext);
+            return _companyRepository;
+        }
     }
+    public IEmployeeRepository Employee {
+        get {
+            _employeeRepository ??= new
+                EmployeeRepository(_repositoryContext);
+            return _employeeRepository;
+        }
+    }
+    public void Save() => _repositoryContext.SaveChanges();
+
 }
-

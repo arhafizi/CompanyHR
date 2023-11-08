@@ -362,4 +362,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /CompanyHR/internal_logs
-/CompanyHR.Presentation/Controllers/CompaniesController.cs
+

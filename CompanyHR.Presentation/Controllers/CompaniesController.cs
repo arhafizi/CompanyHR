@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Entities.Exceptions;
+using Microsoft.AspNetCore.Mvc;
 using Services.Contracts;
-using System.Runtime.InteropServices;
 
 namespace CompanyHR.Presentation.Controllers;
 [Route("api/companies")]
@@ -15,6 +15,14 @@ public class CompaniesController : ControllerBase {
         var companies = _service.CompanyService.GetAllCompanies(trackChanges: false);
 
         return Ok(companies);
+    }
+
+    [HttpGet("{id:guid}")]
+    public IActionResult GetCompany(Guid id) {
+        var company = _service.CompanyService.GetCompany(id, trackChanges: false);
+        if (company is null)
+            throw new CompanyNotFoundException(id);
+        return Ok(company);
     }
 
 }

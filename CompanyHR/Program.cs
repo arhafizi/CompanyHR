@@ -1,3 +1,4 @@
+using CompanyHR;
 using CompanyHR.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
 using NLog;
@@ -16,6 +17,7 @@ builder.Services.ConfigureLoggerService();
 builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureServiceManager();
 builder.Services.ConfigureSqlContext(builder.Configuration);
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 var app = builder.Build();
 

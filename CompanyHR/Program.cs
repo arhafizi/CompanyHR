@@ -6,11 +6,7 @@ using NLog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
-
-builder.Services.AddControllers()
-    .AddApplicationPart(typeof(CompanyHR.Presentation.AssemblyReference).Assembly);
 
 builder.Services.ConfigureCors();
 builder.Services.ConfigureIISIntegration();
@@ -19,6 +15,9 @@ builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureServiceManager();
 builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+builder.Services.AddControllers()
+    .AddApplicationPart(typeof(CompanyHR.Presentation.AssemblyReference).Assembly);
 
 var app = builder.Build();
 

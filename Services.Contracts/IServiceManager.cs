@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Services.Contracts;
-public class IServiceManager {
+public interface IServiceManager {
     public ICompanyService CompanyService { get; }
     public IEmployeeService EmployeeService { get; }
 }

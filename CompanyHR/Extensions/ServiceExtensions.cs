@@ -1,4 +1,5 @@
-﻿using Contracts;
+﻿using CompanyHR.Formaters;
+using Contracts;
 using LoggerService;
 using Microsoft.EntityFrameworkCore;
 using Repository;
@@ -22,11 +23,13 @@ public static class ServiceExtensions {
         services.AddSingleton<ILoggerManager, LoggerManager>();
     public static void ConfigureRepositoryManager(this IServiceCollection services) =>
         services.AddScoped<IRepositoryManager, RepositoryManager>();
-    public static void ConfigureSqlContext(this IServiceCollection services,IConfiguration configuration) =>
+    public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration) =>
         services.AddDbContext<RepositoryContext>(opts =>
             opts.UseSqlServer(configuration.GetConnectionString("sqlConnection")));
     public static void ConfigureServiceManager(this IServiceCollection services) =>
         services.AddScoped<IServiceManager, ServiceManager>();
+    public static IMvcBuilder AddCustomCSVFormatter(this IMvcBuilder builder) =>
+        builder.AddMvcOptions(config => config.OutputFormatters.Add(new CsvOutputFormatter()));
 
 }
 

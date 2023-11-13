@@ -12,7 +12,7 @@ public class EmployeesController : ControllerBase {
         _service = service;
     }
 
-    [HttpGet("{id:guid}", Name = "GetEmployeeForCompany")]
+    [HttpGet("all/{id:guid}", Name = "GetEmployeeForCompany")]
     public IActionResult GetEmployeesForCompany(Guid companyId) {
         var employees = _service.EmployeeService.GetEmployees(companyId, trackChanges: false);
 

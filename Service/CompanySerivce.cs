@@ -47,4 +47,14 @@ internal sealed class CompanyService : ICompanyService {
         
         return companyToReturn;
     }
+
+    public IEnumerable<CompanyDto> GetByIds(IEnumerable<Guid> ids, bool trackChanges) {
+        if (ids is null)
+            throw new IdParametersBadRequestException();
+        var companyEntities = _repository.Company.GetByIds(ids, trackChanges);
+        if (ids.Count() != companyEntities.Count())
+            throw new CollectionByIdsBadRequestException();
+        var companiesToReturn = _mapper.Map<IEnumerable<CompanyDto>>(companyEntities);
+        return companiesToReturn;
+    }
 }

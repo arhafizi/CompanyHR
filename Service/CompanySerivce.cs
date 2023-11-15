@@ -26,25 +26,25 @@ internal sealed class CompanyService : ICompanyService {
     }
 
     public CompanyDto GetCompany(Guid id, bool trackChanges) {
-        
+
         var company = _repository.Company.GetCompany(id, trackChanges);
-        
+
         if (company is null)
             throw new CompanyNotFoundException(id);
         var companyDto = _mapper.Map<CompanyDto>(company);
-        
+
         return companyDto;
     }
 
     public CompanyDto CreateCompany(CompanyCreationDto company) {
 
         var companyEntity = _mapper.Map<Company>(company);
-        
+
         _repository.Company.CreateCompany(companyEntity);
         _repository.Save();
-        
+
         var companyToReturn = _mapper.Map<CompanyDto>(companyEntity);
-        
+
         return companyToReturn;
     }
 
@@ -56,5 +56,23 @@ internal sealed class CompanyService : ICompanyService {
             throw new CollectionByIdsBadRequestException();
         var companiesToReturn = _mapper.Map<IEnumerable<CompanyDto>>(companyEntities);
         return companiesToReturn;
+    }
+
+    public (IEnumerable<CompanyDto> companies, string ids) CreateCompanyCollection
+        (IEnumerable<CompanyCreationDto> companyCollection) {
+
+        if (companyCollection is null)
+            throw new CompanyCollectionBadRequest();
+
+        var companyEntities = _mapper.Map<IEnumerable<Company>>(companyCollection);
+        foreach (var company in companyEntities) {
+            _repository.Company.CreateCompany(company);
+        }
+        _repository.Save();
+
+        var companyCollectionToReturn = _mapper.Map<IEnumerable<CompanyDto>>(companyEntities);
+        var ids = string.Join(",", companyCollectionToReturn.Select(c => c.Id));
+
+        return (companies: companyCollectionToReturn, ids: ids);
     }
 }

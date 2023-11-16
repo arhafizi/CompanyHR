@@ -20,6 +20,7 @@ public class MappingProfile : Profile
 
         CreateMap<EmployeeUpdateDto, Employee>();
 
+        CreateMap<CompanyUpdateDto, Company>();
 
     }
 }

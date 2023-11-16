@@ -73,5 +73,20 @@ internal class EmployeeService : IEmployeeService {
         _repository.Employee.DeleteEmployee(employeeForCompany);
         _repository.Save();
     }
+
+    public void UpdateEmployeeForCompany(Guid cmpId, Guid id, EmployeeUpdateDto empUpdate,bool compTC, bool empTC) {
+       
+        var company = _repository.Company.GetCompany(cmpId, compTC);
+        if (company is null)
+            throw new CompanyNotFoundException(cmpId);
+        
+        var empEntity = _repository.Employee.GetEmployee(cmpId, id, empTC);
+        if (empEntity is null)
+            throw new EmployeeNotFoundException(id);
+        
+        _mapper.Map(empUpdate, empEntity);
+        _repository.Save();
+    }
+
 }
 

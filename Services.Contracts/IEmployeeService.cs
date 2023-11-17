@@ -1,4 +1,5 @@
-﻿using Shared.DataTransferObjects;
+﻿using Entities.Models;
+using Shared.DataTransferObjects;
 
 namespace Services.Contracts;
 public interface IEmployeeService {
@@ -9,4 +10,7 @@ public interface IEmployeeService {
     void DeleteEmployeeForCompany(Guid companyId, Guid id, bool trackChanges);
     void UpdateEmployeeForCompany(Guid companyId, Guid id,
         EmployeeUpdateDto employeeForUpdate, bool compTrackChanges, bool empTrackChanges);
+    (EmployeeUpdateDto empToPatch, Employee empEntity) GetEmployeeForPatch(Guid companyId,
+        Guid id, bool compTrackChanges, bool empTrackChanges);
+    void SaveChangesForPatch(EmployeeUpdateDto empPatch, Employee empEntity);
 }

@@ -36,6 +36,9 @@ public class CompaniesController : ControllerBase {
 
         if (company is null)
             return BadRequest("CompanyForCreationDto object is null");
+        
+        if (!ModelState.IsValid)
+            return UnprocessableEntity(ModelState);
 
         var createdCompany = _service.CompanyService.CreateCompany(company);
 

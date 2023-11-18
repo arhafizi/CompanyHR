@@ -34,6 +34,9 @@ public class EmployeesController : ControllerBase {
         if (employee is null)
             return BadRequest("EmployeeForCreationDto object is null");
 
+        if (!ModelState.IsValid)
+            return UnprocessableEntity(ModelState);
+
         var employeeToReturn = _service.EmployeeService
             .CreateEmployeeForCompany(companyId, employee, trackChanges: false);
 

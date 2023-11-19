@@ -1,8 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Shared.DataTransferObjects;
 
-namespace Shared.DataTransferObjects;
-public record EmployeeUpdateDto(string Name, int Age, string Position);
+public record EmployeeUpdateDto : EmployeeManipulationDto;

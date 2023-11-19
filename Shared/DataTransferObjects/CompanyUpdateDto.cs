@@ -5,5 +5,4 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Shared.DataTransferObjects;
-public record CompanyUpdateDto(string Name, string Address, string Country,
-    IEnumerable<EmployeeCreationDto> Employees);
+public record CompanyUpdateDto : CompanyManipulationDto;

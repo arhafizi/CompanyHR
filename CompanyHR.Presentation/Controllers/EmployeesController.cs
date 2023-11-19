@@ -58,6 +58,9 @@ public class EmployeesController : ControllerBase {
         if (employee is null)
             return BadRequest("EmployeeForUpdateDto object is null");
 
+        if (!ModelState.IsValid)
+            return UnprocessableEntity(ModelState);
+
         _service.EmployeeService.UpdateEmployeeForCompany(companyId, id, employee,
             compTrackChanges: false, empTrackChanges: true);
 
@@ -71,9 +74,16 @@ public class EmployeesController : ControllerBase {
             return BadRequest("patchDoc object sent from client is null.");
 
         var result = _service.EmployeeService.GetEmployeeForPatch(companyId, id, compTrackChanges: false, empTrackChanges: true);
-        patchDoc.ApplyTo(result.empToPatch);
-        _service.EmployeeService.SaveChangesForPatch(result.empToPatch, result.empEntity);
        
+        patchDoc.ApplyTo(result.empToPatch, ModelState);
+        
+        TryValidateModel(result.empToPatch);
+
+        if (!ModelState.IsValid)
+            return UnprocessableEntity(ModelState);
+
+        _service.EmployeeService.SaveChangesForPatch(result.empToPatch, result.empEntity);
+
         return NoContent();
     }
 }

@@ -1,5 +1,4 @@
 using CompanyHR;
-using CompanyHR.ActionFilters;
 using CompanyHR.Extensions;
 using CompanyHR.Presentation.ActionFilters;
 using Contracts;

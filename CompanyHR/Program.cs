@@ -1,5 +1,7 @@
 using CompanyHR;
+using CompanyHR.ActionFilters;
 using CompanyHR.Extensions;
+using CompanyHR.Presentation.ActionFilters;
 using Contracts;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +26,8 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.Configure<ApiBehaviorOptions>(options => {
     options.SuppressModelStateInvalidFilter = true;
 });
+
+builder.Services.AddScoped<ValidationFilterAttribute>();
 builder.Services.AddControllers(config => {
     config.RespectBrowserAcceptHeader = true;
     config.ReturnHttpNotAcceptable = true;

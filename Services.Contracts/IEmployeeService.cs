@@ -3,14 +3,14 @@ using Shared.DataTransferObjects;
 
 namespace Services.Contracts;
 public interface IEmployeeService {
-    IEnumerable<EmployeeDto> GetEmployees(Guid companyId, bool trackChanges);
-    EmployeeDto GetEmployee(Guid companyId, Guid id, bool trackChanges);
-    EmployeeDto CreateEmployeeForCompany(Guid companyId,
+    Task<IEnumerable<EmployeeDto>> GetEmployeesAsync(Guid companyId, bool trackChanges);
+    Task<EmployeeDto> GetEmployeeAsync(Guid companyId, Guid id, bool trackChanges);
+    Task<EmployeeDto> CreateEmployeeForCompanyAsync(Guid companyId,
         EmployeeCreationDto employeeForCreation, bool trackChanges);
-    void DeleteEmployeeForCompany(Guid companyId, Guid id, bool trackChanges);
-    void UpdateEmployeeForCompany(Guid companyId, Guid id,
+    Task DeleteEmployeeForCompanyAsync(Guid companyId, Guid id, bool trackChanges);
+    Task UpdateEmployeeForCompanyAsync(Guid companyId, Guid id,
         EmployeeUpdateDto employeeForUpdate, bool compTrackChanges, bool empTrackChanges);
-    (EmployeeUpdateDto empToPatch, Employee empEntity) GetEmployeeForPatch(Guid companyId,
+    Task<(EmployeeUpdateDto empToPatch, Employee empEntity)> GetEmployeeForPatchAsync(Guid companyId,
         Guid id, bool compTrackChanges, bool empTrackChanges);
-    void SaveChangesForPatch(EmployeeUpdateDto empPatch, Employee empEntity);
+    Task SaveChangesForPatchAsync(EmployeeUpdateDto empPatch, Employee empEntity);
 }

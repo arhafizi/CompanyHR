@@ -17,6 +17,7 @@ public class EmployeeRepository : RepositoryBase<Employee>, IEmployeeRepository 
             .OrderBy(e => e.Name)
             .Skip((empPrms.PageNumber - 1) * empPrms.PageSize)
             .Take(empPrms.PageSize)
+            .Sort(empPrms.OrderBy)
             .ToListAsync();
 
         //additional call to db - for big dbs
@@ -28,7 +29,6 @@ public class EmployeeRepository : RepositoryBase<Employee>, IEmployeeRepository 
     }
 
     public async Task<Employee> GetEmployeeAsync(Guid companyId, Guid id, bool trackChanges) {
-
         return await FindByCondition(e => e.CompanyId.Equals(companyId) && e.Id.Equals(id), trackChanges)
             .SingleOrDefaultAsync();
     }

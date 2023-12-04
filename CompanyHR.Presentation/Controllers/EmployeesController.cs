@@ -17,6 +17,7 @@ public class EmployeesController : ControllerBase {
     }
 
     [HttpGet("all/{id:guid}", Name = "GetEmployeeForCompany")]
+    [HttpHead]
     public async Task<IActionResult> GetEmployeesForCompany(Guid companyId,
         [FromQuery] EmployeeParameters empParameters) {
         

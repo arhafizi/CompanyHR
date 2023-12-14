@@ -40,6 +40,8 @@ public static class ServiceExtensions {
             if (systemTextJsonOutputFormatter != null) {
                 systemTextJsonOutputFormatter.SupportedMediaTypes
                 .Add("application/vnd.myapi.hateoas+json");
+                systemTextJsonOutputFormatter.SupportedMediaTypes
+                .Add("application/vnd.myapi.apiroot+json");
             }
             var xmlOutputFormatter = config.OutputFormatters
             .OfType<XmlDataContractSerializerOutputFormatter>()?
@@ -47,6 +49,8 @@ public static class ServiceExtensions {
             if (xmlOutputFormatter != null) {
                 xmlOutputFormatter.SupportedMediaTypes
                 .Add("application/vnd.myapi.hateoas+xml");
+                xmlOutputFormatter.SupportedMediaTypes
+                .Add("application/vnd.myapi.apiroot+json");
             }
         });
     }

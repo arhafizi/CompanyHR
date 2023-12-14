@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Options;
 using Service.DataShaping;
 using Shared.DataTransferObjects;
+using CompanyHR.Utility;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,8 @@ builder.Services.ConfigureServiceManager();
 builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddScoped<IDataShaper<EmployeeDto>, DataShaper<EmployeeDto>>();
+builder.Services.AddScoped<ValidateMediaTypeAttribute>();
+builder.Services.AddScoped<IEmployeeLinks, EmployeeLinks>();
 
 builder.Services.Configure<ApiBehaviorOptions>(options => {
     options.SuppressModelStateInvalidFilter = true;
@@ -36,6 +39,8 @@ builder.Services.AddControllers(config => {
     config.InputFormatters.Insert(0, GetJsonPatchInputFormatter());
 }).AddCustomCSVFormatter()
     .AddApplicationPart(typeof(CompanyHR.Presentation.AssemblyReference).Assembly);
+builder.Services.AddCustomMediaTypes();
+
 //disable supporting xml
 //.AddXmlDataContractSerializerFormatters()
 

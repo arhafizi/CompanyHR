@@ -8,21 +8,18 @@ namespace Repository;
 public class EmployeeRepository : RepositoryBase<Employee>, IEmployeeRepository {
     public EmployeeRepository(RepositoryContext repositoryContext) : base(repositoryContext) { }
 
-    public async Task<PagedList<Employee>> GetEmployeesAsync(Guid cmpId,
-        EmployeeParameters empPrms, bool tc) {
+    public async Task<PagedList<Employee>> GetEmployeesAsync(Guid cmpId, EmployeeParameters empPrms, bool tc) {
 
-        var employees = await FindByCondition(e => e.CompanyId.Equals(cmpId),tc)
+        var employees = await FindByCondition(e => e.CompanyId.Equals(cmpId), tc)
             .FilterEmployees(empPrms.MinAge, empPrms.MaxAge)
-            .Search(empPrms.SearchTerm)
-            .OrderBy(e => e.Name)
+            .Search(empPrms.SearchTerm!)
+            .Sort(empPrms.OrderBy!)
             .Skip((empPrms.PageNumber - 1) * empPrms.PageSize)
             .Take(empPrms.PageSize)
-            .Sort(empPrms.OrderBy)
             .ToListAsync();
 
         //additional call to db - for big dbs
-        var count = await FindByCondition(e => e.CompanyId.Equals(cmpId), tc)
-            .CountAsync();
+        var count = await FindByCondition(e => e.CompanyId.Equals(cmpId), tc).CountAsync();
 
         return new
             PagedList<Employee>(employees, count, empPrms.PageNumber, empPrms.PageSize);

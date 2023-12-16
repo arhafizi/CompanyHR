@@ -1,11 +1,12 @@
 ﻿using CompanyHR.Presentation.ActionFilters;
 using CompanyHR.Presentation.ModelBinders;
-using Entities.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Services.Contracts;
 using Shared.DataTransferObjects;
 
 namespace CompanyHR.Presentation.Controllers;
+
+[ApiVersion("1.0")]
 [Route("api/companies")]
 [ApiController]
 public class CompaniesController : ControllerBase {

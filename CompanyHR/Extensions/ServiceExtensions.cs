@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Repository;
 using Service;
 using Services.Contracts;
+using Microsoft.AspNetCore.Mvc.Versioning;
+using CompanyHR.Presentation.Controllers;
 
 namespace CompanyHR.Extensions;
 public static class ServiceExtensions {
@@ -52,6 +54,25 @@ public static class ServiceExtensions {
                 xmlOutputFormatter.SupportedMediaTypes
                 .Add("application/vnd.myapi.apiroot+json");
             }
+        });
+    }
+    public static void ConfigureVersioning(this IServiceCollection services) {
+        services.AddApiVersioning(opt => {
+            opt.ReportApiVersions = true;
+            opt.AssumeDefaultVersionWhenUnspecified = true;
+            opt.DefaultApiVersion = new ApiVersion(1, 0);
+            opt.ApiVersionReader = new HeaderApiVersionReader("api-version");
+            //second option:
+            //opt.ApiVersionReader = new QueryStringApiVersionReader("api-version");
+
+            /*
+             *if we have a lot of versions of a single controller, we can assign these
+             *versions in the configuration instead & remove [ApiVersion] attr from the controllers : 
+            opt.Conventions.Controller<CompaniesController>()
+                .HasApiVersion(new ApiVersion(1, 0));
+            opt.Conventions.Controller<CompaniesV2Controller>()
+                .HasDeprecatedApiVersion(new ApiVersion(2, 0));
+            */
         });
     }
 

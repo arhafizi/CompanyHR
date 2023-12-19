@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Repository.Configuration;
-public class EmployeeConfiguration : IEntityTypeConfiguration<Employee> {
+public class EmployeeConfig : IEntityTypeConfiguration<Employee> {
     public void Configure(EntityTypeBuilder<Employee> builder) {
         builder.HasData(
             new Employee {

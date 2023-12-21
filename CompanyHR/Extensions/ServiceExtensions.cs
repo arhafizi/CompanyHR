@@ -126,7 +126,8 @@ public static class ServiceExtensions {
 
         var jwtSettings = configuration.GetSection("JwtSettings");
 
-        var secretKey = Environment.GetEnvironmentVariable("SECRET");
+        //var secretKey = Environment.GetEnvironmentVariable("SECRET");
+        var secretKey = "EnvSecretKey4321";
 
         services.AddAuthentication(opt => {
             opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

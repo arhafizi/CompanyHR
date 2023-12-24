@@ -1,21 +1,21 @@
 ﻿using CompanyHR.Formaters;
 using Contracts;
 using LoggerService;
+using Repository;
+using Service;
+using Entities.Models;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Repository;
-using Service;
 using Services.Contracts;
 using Microsoft.AspNetCore.Mvc.Versioning;
-using CompanyHR.Presentation.Controllers;
 using Marvin.Cache.Headers;
 using AspNetCoreRateLimit;
-using Entities.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Entities.ConfigurationModels;
 
 namespace CompanyHR.Extensions;
 public static class ServiceExtensions {
@@ -124,7 +124,8 @@ public static class ServiceExtensions {
 
     public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration) {
 
-        var jwtSettings = configuration.GetSection("JwtSettings");
+        var jwtConfig = new JwtConfiguration();
+        configuration.Bind(jwtConfig.Section, jwtConfig);
 
         //var secretKey = Environment.GetEnvironmentVariable("SECRET");
         var secretKey = "EnvSecretKey4321";
@@ -139,13 +140,16 @@ public static class ServiceExtensions {
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = jwtSettings["validIssuer"],
-                    ValidAudience = jwtSettings["validAudience"],
+                    ValidIssuer = jwtConfig.ValidIssuer,
+                    ValidAudience = jwtConfig.ValidAudience,
                     IssuerSigningKey = new
                         SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
                 };
             });
     }
+
+    public static void AddJwtConfiguration(this IServiceCollection services, IConfiguration configuration)
+        => services.Configure<JwtConfiguration>(configuration.GetSection("JwtSettings"));
 
 }
 

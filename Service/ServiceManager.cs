@@ -2,7 +2,8 @@
 using Contracts;
 using Entities.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
+using Entities.ConfigurationModels;
+using Microsoft.Extensions.Options;
 using Services.Contracts;
 
 namespace Service;
@@ -17,7 +18,7 @@ public sealed class ServiceManager : IServiceManager {
         IMapper mapper,
         IEmployeeLinks employeeLinks,
         UserManager<User> userManager,
-        IConfiguration configuration) {
+        IOptions<JwtConfiguration> configuration) {
 
         _companyService = new Lazy<ICompanyService>(
             () => new CompanyService(repositoryManager, logger, mapper));

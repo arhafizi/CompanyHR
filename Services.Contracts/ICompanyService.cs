@@ -1,4 +1,5 @@
-﻿using Shared.DataTransferObjects;
+﻿using Entities.Responses;
+using Shared.DataTransferObjects;
 
 namespace Services.Contracts;
 public interface ICompanyService {

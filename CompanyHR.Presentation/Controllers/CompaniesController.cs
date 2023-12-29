@@ -1,5 +1,6 @@
 ﻿using CompanyHR.Presentation.ActionFilters;
 using CompanyHR.Presentation.ModelBinders;
+using Entities.Responses;
 using Marvin.Cache.Headers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -90,11 +91,11 @@ public class CompaniesController : ControllerBase {
 
     [HttpPut("{id:guid}")]
     [ServiceFilter(typeof(ValidationFilterAttribute))]
-    public async Task<IActionResult> UpdateCompany(Guid id, 
+    public async Task<IActionResult> UpdateCompany(Guid id,
         [FromBody] CompanyUpdateDto company) {
-        
-        await _service.CompanyService.UpdateCompanyAsync(id, company, trackChanges:true);
-        
+
+        await _service.CompanyService.UpdateCompanyAsync(id, company, trackChanges: true);
+
         return NoContent();
     }
 

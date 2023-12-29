@@ -4,40 +4,40 @@ using Entities.Exceptions;
 using Entities.Models;
 using Services.Contracts;
 using Shared.DataTransferObjects;
-using System.ComponentModel.Design;
 
 namespace Service;
 internal sealed class CompanyService : ICompanyService {
-    private readonly IRepositoryManager _repository;
+    private readonly IRepositoryManager _repo;
     private readonly ILoggerManager _logger;
     private readonly IMapper _mapper;
 
     public CompanyService(IRepositoryManager repository, ILoggerManager logger, IMapper mapper) {
-        _repository = repository;
+        _repo = repository;
         _logger = logger;
         _mapper = mapper;
     }
 
     private async Task<Company> GetCompanyAndCheckIfItExists(Guid id, bool trackChanges) {
-        
-        var company = await _repository.Company.GetCompanyAsync(id, trackChanges);
-        
+
+        var company = await _repo.Company.GetCompanyAsync(id, trackChanges);
+
         if (company is null)
             throw new CompanyNotFoundException(id);
-        
+
         return company;
     }
 
     public async Task<IEnumerable<CompanyDto>> GetAllCompaniesAsync(bool trackChanges) {
 
-        var companies = await _repository.Company.GetAllCompaniesAsync(trackChanges);
+        var companies = await _repo.Company.GetAllCompaniesAsync(trackChanges);
 
         var companiesDto = _mapper.Map<IEnumerable<CompanyDto>>(companies);
+
         return companiesDto;
     }
 
     public async Task<CompanyDto> GetCompanyAsync(Guid id, bool trackChanges) {
-
+      
         var company = await GetCompanyAndCheckIfItExists(id, trackChanges);
 
         var companyDto = _mapper.Map<CompanyDto>(company);
@@ -48,8 +48,8 @@ internal sealed class CompanyService : ICompanyService {
 
         var companyEntity = _mapper.Map<Company>(company);
 
-        _repository.Company.CreateCompany(companyEntity);
-        await _repository.SaveAsync();
+        _repo.Company.CreateCompany(companyEntity);
+        await _repo.SaveAsync();
 
         var companyToReturn = _mapper.Map<CompanyDto>(companyEntity);
         return companyToReturn;
@@ -60,7 +60,7 @@ internal sealed class CompanyService : ICompanyService {
         if (ids is null)
             throw new IdParametersBadRequestException();
 
-        var cmpEntities = await _repository.Company.GetByIdsAsync(ids, trkChanges);
+        var cmpEntities = await _repo.Company.GetByIdsAsync(ids, trkChanges);
         if (ids.Count() != cmpEntities.Count())
             throw new CollectionByIdsBadRequestException();
 
@@ -77,10 +77,10 @@ internal sealed class CompanyService : ICompanyService {
         var cmpEntities = _mapper.Map<IEnumerable<Company>>(cmpCollection);
 
         foreach (var company in cmpEntities) {
-            _repository.Company.CreateCompany(company);
+            _repo.Company.CreateCompany(company);
         }
 
-        await _repository.SaveAsync();
+        await _repo.SaveAsync();
 
         var cmpCollectionToReturn = _mapper.Map<IEnumerable<CompanyDto>>(cmpEntities);
 
@@ -93,8 +93,8 @@ internal sealed class CompanyService : ICompanyService {
 
         var company = await GetCompanyAndCheckIfItExists(cmpId, trkChanges);
 
-        _repository.Company.DeleteCompany(company);
-        await _repository.SaveAsync();
+        _repo.Company.DeleteCompany(company);
+        await _repo.SaveAsync();
     }
 
     public async Task UpdateCompanyAsync(Guid cmpId, CompanyUpdateDto cmpForUpdate, bool trkChanges) {
@@ -102,7 +102,7 @@ internal sealed class CompanyService : ICompanyService {
         var company = await GetCompanyAndCheckIfItExists(cmpId, trkChanges);
 
         _mapper.Map(cmpForUpdate, company);
-        await _repository.SaveAsync();
+        await _repo.SaveAsync();
     }
 
 }
